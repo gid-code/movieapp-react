@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import CastList from "./CastList";
 import { TMDB_IMGURL, TMDB_BASEURL, TMDB_TOKEN } from "../../config/apiConfig";
 import Axios from "axios";
 import CrewList from "./CrewList";
-import ImageList from "./ImageList";
+import ImageList from "../ImageList";
+import CastList from "../CastList";
 
 export default class Movie extends Component {
 	state = {
@@ -11,15 +11,21 @@ export default class Movie extends Component {
 		modalOpen: false,
 		imgModal: false,
 		chImg: "",
+		type: "",
 	};
 
 	componentDidMount() {
-		const { id } = this.props.match.params;
+		const { id, type } = this.props.match.params;
+
+		this.setState({ type });
+
+		// if (type === 'movie') {
+
+		// }
 
 		Axios.get(
 			TMDB_BASEURL +
-				"/movie/" +
-				id +
+				`/${type}/${id}` +
 				"?append_to_response=credits,videos,images",
 			{
 				headers: {
@@ -48,6 +54,9 @@ export default class Movie extends Component {
 				credits,
 				images,
 				videos,
+				name,
+				first_air_date,
+				created_by,
 			} = this.state.details;
 
 			var genrate = function (grs) {
@@ -153,6 +162,45 @@ export default class Movie extends Component {
 				this.setState({ chImg: img });
 			};
 
+			var crew = (cr) => {
+				return (
+					<div className="mt-12">
+						<h4 className="text-white font-semibold">Featured Crew</h4>
+						<div className="flex mt-4">
+							<CrewList crew={cr} />
+						</div>
+					</div>
+				);
+			};
+
+			var creator = (cr) => {
+				var count;
+				if (cr.length >= 3) {
+					count = 3;
+				} else {
+					count = cr.length;
+				}
+				const element = [];
+				for (let index = 0; index < count; index++) {
+					element.push(cr[index]);
+				}
+				console.log(element);
+				return (
+					<div className="mt-12">
+						<div className="flex mt-4">
+							{element.map((el) => {
+								return (
+									<div className="mr-8">
+										<div>{el.name}</div>
+										<div className="text-sm text-grey-400">Creator</div>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+				);
+			};
+
 			return (
 				<div>
 					<div className="movie-info border-b border-gray-800">
@@ -163,7 +211,9 @@ export default class Movie extends Component {
 								src={TMDB_IMGURL + "w500" + poster_path}
 							></img>
 							<div className="md:ml-24">
-								<h2 className="text-4xl font-semibold">{original_title}</h2>
+								<h2 className="text-4xl font-semibold">
+									{original_title ? original_title : name}
+								</h2>
 								<div className="flex flex-wrap items-center text-gray-400 text-sm">
 									<svg
 										className="fill-current text-orange-500 w-4"
@@ -178,19 +228,16 @@ export default class Movie extends Component {
 									</svg>
 									<span className="ml-1">{vote_average * 10 + "%"}</span>
 									<span className="mx-2">|</span>
-									<span>{release_date}</span>
-									<span clasNames="mx-2">| </span>
+									<span>{release_date ? release_date : first_air_date}</span>
+									<span clasName="mx-2">|</span>
 									<span>{genrate(genres)}</span>
 								</div>
 
 								<p className="text-gray-300 mt-8">{overview}</p>
 
-								<div className="mt-12">
-									<h4 className="text-white font-semibold">Featured Crew</h4>
-									<div className="flex mt-4">
-										<CrewList crew={credits.crew} />
-									</div>
-								</div>
+								{this.state.type === "movie"
+									? crew(credits.crew)
+									: creator(created_by)}
 
 								{videos.results.length > 0 ? displayTrailer(videos) : null}
 							</div>

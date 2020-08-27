@@ -6,8 +6,14 @@ export default class CrewList extends Component {
 	render() {
 		if (this.props.crew) {
 			const { crew } = this.props;
+			var count;
+			if (crew.length >= 3) {
+				count = 3;
+			} else {
+				count = crew.length;
+			}
 			const element = [];
-			for (let index = 0; index < 3; index++) {
+			for (let index = 0; index < count; index++) {
 				element.push(crew[index]);
 			}
 			return (

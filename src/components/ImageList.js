@@ -1,12 +1,18 @@
 import React, { Component } from "react";
-import { TMDB_IMGURL } from "../../config/apiConfig";
+import { TMDB_IMGURL } from "../config/apiConfig";
 
 export default class ImageList extends Component {
 	render() {
 		if (this.props.imgs) {
 			const { imgs } = this.props;
 			const element = [];
-			for (let index = 0; index < 3; index++) {
+			var count;
+			if (imgs.length >= 10) {
+				count = 10;
+			} else {
+				count = imgs.length;
+			}
+			for (let index = 0; index < count; index++) {
 				element.push(imgs[index]);
 			}
 			return element.map((img) => {

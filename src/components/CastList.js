@@ -1,12 +1,18 @@
 import React, { Component } from "react";
-import { TMDB_IMGURL } from "../../config/apiConfig";
+import { TMDB_IMGURL } from "../config/apiConfig";
 
 export default class CastList extends Component {
 	render() {
 		if (this.props.cast) {
 			const { cast } = this.props;
 			const element = [];
-			for (let index = 0; index < 5; index++) {
+			var count;
+			if (cast.length >= 5) {
+				count = 5;
+			} else {
+				count = cast.length;
+			}
+			for (let index = 0; index < count; index++) {
 				element.push(cast[index]);
 			}
 			return element.map((ct) => {

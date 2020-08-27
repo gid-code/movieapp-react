@@ -12,8 +12,10 @@ export default class MovieItem extends Component {
 				release_date,
 				genre_ids,
 				id,
-			} = this.props.mv;
-			const { genres } = this.props;
+				first_air_date,
+				name,
+			} = this.props.item;
+			const { genres, type } = this.props;
 
 			var genrate = function (grs) {
 				return grs
@@ -26,7 +28,7 @@ export default class MovieItem extends Component {
 
 			return (
 				<div class="mt-8">
-					<Link to={`/movie/${id}`}>
+					<Link to={`/${type}/${id}`}>
 						<img
 							src={TMDB_IMGURL + "w500" + poster_path}
 							alt=""
@@ -35,10 +37,10 @@ export default class MovieItem extends Component {
 					</Link>
 					<div className="mt-2">
 						<Link
-							to={`/movie/${id}`}
+							to={`/${type}/${id}`}
 							className="text-lg mt-2 hover:text-gray:300"
 						>
-							{original_title}
+							{original_title ? original_title : name}
 						</Link>
 						<div class="flex items-center text-gray-400 text-sm mt-1">
 							<svg
@@ -54,7 +56,7 @@ export default class MovieItem extends Component {
 							</svg>
 							<span className="ml-1">{vote_average * 10 + "%"}</span>
 							<span className="mx-2">|</span>
-							<span>{release_date}</span>
+							<span>{release_date ? release_date : first_air_date}</span>
 						</div>
 						<div className="text-gray-400 text-sm">{genrate(genre_ids)}</div>
 					</div>

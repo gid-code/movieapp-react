@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import MoviesList from "./MoviesList";
 import axios from "axios";
-import { TMDB_BASEURL, TMDB_TOKEN } from "../../config/apiConfig_dev";
+import { TMDB_BASEURL, TMDB_TOKEN } from "../../config/apiConfig";
 
 export default class Movies extends Component {
 	// constructor(props) {
@@ -56,7 +56,6 @@ export default class Movies extends Component {
 	}
 
 	render() {
-		// console.log(this.state.pm)
 		if (this.state.pm === null || this.state.gnr === null) {
 			return <div>Loading..</div>;
 		} else {

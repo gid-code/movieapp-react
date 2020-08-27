@@ -1,29 +1,79 @@
-import React, { Component } from 'react'
-import MoviesList from '../movies/MoviesList'
+import React, { Component } from "react";
+import axios from "axios";
+import { TMDB_BASEURL, TMDB_TOKEN } from "../../config/apiConfig";
+import MoviesList from "../movies/MoviesList";
 
 export default class TvShows extends Component {
-   render() {
-      return (
-         <div className="container mx-auto px-4 pt-16">
-            <div className="popular-movies">
-               <h2 className="uppercase tracking-wider text-orange-500 text-lg font-semibold">
-                  Popular Tv
-               </h2>
+	state = {
+		ptv: null,
+		trs: null,
+		gnr: null,
+	};
 
-               <MoviesList />
-            </div>
+	componentDidMount() {
+		// popular tvshows
+		axios
+			.get(TMDB_BASEURL + "/tv/popular", {
+				headers: {
+					"Content-Type": "application/json;charset=utf-8",
+					Authorization: `Bearer ${TMDB_TOKEN}`,
+				},
+			})
+			.then((res) => {
+				this.setState({ ptv: res.data["results"] });
+			})
+			.catch((err) => console.log(err));
 
-            {/* end popular-movies */}
+		// top tv
+		axios
+			.get(TMDB_BASEURL + "/tv/top_rated", {
+				headers: {
+					"Content-Type": "application/json;charset=utf-8",
+					Authorization: `Bearer ${TMDB_TOKEN}`,
+				},
+			})
+			.then((res) => this.setState({ trs: res.data["results"] }))
+			.catch((err) => console.log(err));
 
-            <div className="now-playing-movies py-24">
-                  <h2 className="uppercase tracking-wider text-orange-500 text-lg font-semibold">
-                     Top Rated Tv Shows
-                  </h2>
+		// genre
+		axios
+			.get(TMDB_BASEURL + "/genre/tv/list", {
+				headers: {
+					"Content-Type": "application/json;charset=utf-8",
+					Authorization: `Bearer ${TMDB_TOKEN}`,
+				},
+			})
+			.then((res) => this.setState({ gnr: res.data }))
+			.catch((err) => console.log(err));
+	}
 
-                  <MoviesList />
-            </div>
-               {/* end now playing */}
-         </div>
-      )
-   }
+	render() {
+		const { ptv, trs, gnr } = this.state;
+		if (ptv === null || gnr === null) {
+			return <div>Loading...</div>;
+		} else {
+			return (
+				<div className="container mx-auto px-4 pt-16">
+					<div className="popular-movies">
+						<h2 className="uppercase tracking-wider text-orange-500 text-lg font-semibold">
+							Popular Tv
+						</h2>
+
+						<MoviesList tvs={ptv} genres={gnr} />
+					</div>
+
+					{/* end popular-movies */}
+
+					<div className="now-playing-movies py-24">
+						<h2 className="uppercase tracking-wider text-orange-500 text-lg font-semibold">
+							Top Rated Tv Shows
+						</h2>
+
+						<MoviesList tvs={trs} genres={gnr} />
+					</div>
+					{/* end now playing */}
+				</div>
+			);
+		}
+	}
 }
