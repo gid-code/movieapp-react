@@ -42,7 +42,7 @@ export default class MoviesList extends Component {
 				</div>
 			);
 		} else {
-			return <div>Loading</div>;
+			return <div>Loading...</div>;
 		}
 	}
 }
