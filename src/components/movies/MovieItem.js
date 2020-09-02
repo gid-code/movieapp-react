@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { TMDB_IMGURL } from "../../config/apiConfig_dev";
+import { TMDB_IMGURL } from "../../config/apiConfig";
 
 export default class MovieItem extends Component {
 	render() {
@@ -42,7 +42,7 @@ export default class MovieItem extends Component {
 						>
 							{original_title ? original_title : name}
 						</Link>
-						<div class="flex items-center text-gray-400 text-sm mt-1">
+						<div className="flex items-center text-gray-400 text-sm mt-1">
 							<svg
 								className="fill-current text-orange-500 w-4"
 								viewBox="0 0 24 24"

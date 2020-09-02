@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { TMDB_BASEURL } from "../../config/apiConfig";
-import { TMDB_TOKEN } from "../../config/apiConfig_dev";
+import { TMDB_BASEURL, TMDB_TOKEN } from "../../config/apiConfig";
 import ActorList from "./ActorList";
 
 export default class Actors extends Component {
@@ -35,9 +34,7 @@ export default class Actors extends Component {
 							Popular Actors
 						</h2>
 
-						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-							<ActorList actors={acts} />
-						</div>
+						<ActorList actors={acts} />
 					</div>
 				</div>
 			);
