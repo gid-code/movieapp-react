@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { TMDB_IMGURL } from "../config/apiConfig";
+import { Link } from "react-router-dom";
 
 export default class CastList extends Component {
 	render() {
@@ -18,20 +19,20 @@ export default class CastList extends Component {
 			return element.map((ct) => {
 				return (
 					<div className="mt-8">
-						<a href="{{route('actors.show',$cast['id'])}}">
+						<Link to={`/${ct.id}`}>
 							<img
 								src={TMDB_IMGURL + "w300" + ct["profile_path"]}
-								alt="{{$cast['name']}}"
+								alt={ct["name"]}
 								className="hover:opacity-75 transition ease-in-out duration-150"
 							></img>
-						</a>
+						</Link>
 						<div className="mt-2">
-							<a
-								href="{{route('actors.show',$cast['id'])}}"
+							<Link
+								to={`/${ct.id}`}
 								className="text-lg mt-2 hover:text-gray:300"
 							>
 								{ct["name"]}
-							</a>
+							</Link>
 							<h4 className="text-sm mt-1">{ct["character"]}</h4>
 						</div>
 					</div>

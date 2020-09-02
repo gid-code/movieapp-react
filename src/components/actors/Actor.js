@@ -112,8 +112,33 @@ export default class Actor extends Component {
 			};
 
 			var crdts = (it) => {
+				it.forEach((element) => {
+					element.releaseDate = element.release_date
+						? element.release_date
+						: element.first_air_date
+						? element.first_air_date
+						: "Unknown";
+					element.title = element.title
+						? element.title
+						: element.name
+						? element.name
+						: "Untitled";
+					element.character = element.character ? element.character : "Unknown";
+				});
 
-			}
+				var sorted = it.sort(function (a, b) {
+					return b.releaseDate - a.releaseDate;
+				});
+
+				return sorted.map((elt) => {
+					return (
+						<li>
+							{elt["releaseDate"]} &middot;<strong>{elt["title"]}</strong> as{" "}
+							{elt["character"]}
+						</li>
+					);
+				});
+			};
 
 			return (
 				<div>
@@ -145,7 +170,9 @@ export default class Actor extends Component {
 									{socials["instagram_id"] ? (
 										<li className="ml-6">
 											<a
-												href={"https://instagram.com/" + socials["instagram_id"]}
+												href={
+													"https://instagram.com/" + socials["instagram_id"]
+												}
 												title="instagram"
 												target="_blank"
 											>
@@ -222,15 +249,13 @@ export default class Actor extends Component {
 
 					<div className="credits border-b border-gray-800">
 						<div className="container mx-auto px-4 py-16">
-								<h2 className="text-4xl font-semibold">Credits</h2>
-								<ul className="list-disc leading-loose pl-5 mt-8">
-									@foreach($credits as $credit)
-									<li>{{$credit['release_year']}} &middot;<strong>{{$credit['title']}}</strong> as {{$credit['character']}}</li>
-									@endforeach
-								</ul>
-
+							<h2 className="text-4xl font-semibold">Credits</h2>
+							<ul className="list-disc leading-loose pl-5 mt-8">
+								{crdts(credits.cast)}
+							</ul>
 						</div>
 					</div>
+					{/* end of credits */}
 				</div>
 			);
 		}
