@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import MoviesList from "./MoviesList";
 import axios from "axios";
 import { TMDB_BASEURL, TMDB_TOKEN } from "../../config/apiConfig";
+import eaterbig from "../eaterbig.svg";
 
 export default class Movies extends Component {
 	// constructor(props) {
@@ -57,7 +58,13 @@ export default class Movies extends Component {
 
 	render() {
 		if (this.state.pm === null || this.state.gnr === null) {
-			return <div>Loading..</div>;
+			return (
+				<div className="container mx-auto">
+					<div className="mx-auto p-20 m-20">
+						<img alt="" src={eaterbig} className="mx-auto"></img>
+					</div>
+				</div>
+			);
 		} else {
 			return (
 				<div className="container mx-auto px-4 pt-16">

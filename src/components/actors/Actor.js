@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Axios from "axios";
 import { TMDB_BASEURL, TMDB_TOKEN, TMDB_IMGURL } from "../../config/apiConfig";
 import { Link } from "react-router-dom";
+import eaterbig from "../eaterbig.svg";
 
 export default class Actor extends Component {
 	state = {
@@ -54,7 +55,13 @@ export default class Actor extends Component {
 	render() {
 		const { actor, socials, credits } = this.state;
 		if (actor === null || socials === null || credits === null) {
-			return <div>Loading...</div>;
+			return (
+				<div className="container mx-auto">
+					<div className="mx-auto p-20 m-20">
+						<img alt="" src={eaterbig} className="mx-auto"></img>
+					</div>
+				</div>
+			);
 		} else {
 			var img = (pp) => {
 				if (pp) {
@@ -84,7 +91,7 @@ export default class Actor extends Component {
 					var linkToPage =
 						elt.media_type === "tv" ? `tv/${elt.id}` : `movie/${elt.id}`;
 					return (
-						<div className="mt-4">
+						<div className="mt-4" key={elt.id}>
 							<Link to={linkToPage}>
 								<img
 									src={
@@ -96,8 +103,8 @@ export default class Actor extends Component {
 									className="hover:opacity-75 transition ease-in-out duration-150"
 								></img>
 							</Link>
-							<a
-								href="//"
+							<Link
+								to={linkToPage}
 								className="text-sm leading-normal block text-gray-400 hover:text-white mt-1"
 							>
 								{elt.title
@@ -105,7 +112,7 @@ export default class Actor extends Component {
 									: elt.original_name
 									? elt.original_name
 									: "Untitled"}
-							</a>
+							</Link>
 						</div>
 					);
 				});

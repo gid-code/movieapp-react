@@ -18,7 +18,7 @@ export default class CastList extends Component {
 			}
 			return element.map((ct) => {
 				return (
-					<div className="mt-8">
+					<div className="mt-8" key={ct.id}>
 						<Link to={`/${ct.id}`}>
 							<img
 								src={TMDB_IMGURL + "w300" + ct["profile_path"]}

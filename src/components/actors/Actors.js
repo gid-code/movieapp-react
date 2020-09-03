@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { TMDB_BASEURL, TMDB_TOKEN } from "../../config/apiConfig";
 import ActorList from "./ActorList";
+import eaterbig from "../eaterbig.svg";
 
 export default class Actors extends Component {
 	state = {
@@ -39,7 +40,13 @@ export default class Actors extends Component {
 				</div>
 			);
 		} else {
-			return <div>Loading...</div>;
+			return (
+				<div className="container mx-auto">
+					<div className="mx-auto p-20 m-20">
+						<img alt="" src={eaterbig} className="mx-auto"></img>
+					</div>
+				</div>
+			);
 		}
 	}
 }

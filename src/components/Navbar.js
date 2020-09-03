@@ -1,7 +1,120 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { TMDB_BASEURL, TMDB_TOKEN, TMDB_IMGURL } from "../config/apiConfig";
+import eater from "./eater.svg";
 
 export default function Navbar() {
+	const [search, setSearch] = useState("");
+	const [searchResult, setSearchResult] = useState(null);
+	const [searchOpen, setSearchOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const textRef = useRef(React.createRef());
+
+	useEffect(() => {
+		if (search.length < 2) {
+			return;
+		}
+
+		const timeout = setTimeout(() => {
+			result();
+		}, 2000);
+
+		return () => clearTimeout(timeout);
+	}, [search]);
+
+	function result() {
+		if (search.length > 1) {
+			setIsLoading(true);
+			axios
+				.get(TMDB_BASEURL + "/search/movie?query=" + search, {
+					headers: {
+						"Content-Type": "application/json;charset=utf-8",
+						Authorization: `Bearer ${TMDB_TOKEN}`,
+					},
+				})
+				.then((res) => {
+					setSearchResult(res.data["results"]);
+					setIsLoading(false);
+				})
+				.then(setSearchOpen(true))
+				.catch((err) => console.log(err));
+		}
+	}
+
+	var displayResult = () => {
+		if (searchResult !== null) {
+			const elements = [];
+			var count;
+			if (searchResult.length >= 7) {
+				count = 7;
+			} else {
+				count = searchResult.length;
+			}
+			for (let index = 0; index < count; index++) {
+				elements.push(searchResult[index]);
+			}
+			return (
+				<div className="absolute z-50 bg-gray-800 text-sm rounded w-64 mt-4">
+					{elements.length > 0 ? (
+						<ul>
+							{elements.map((result) => {
+								return (
+									<li
+										className="border-b border-gray-700"
+										onClick={() => {
+											setSearchOpen(false);
+											setSearch("");
+											setSearchResult(null);
+										}}
+										key={result.id}
+									>
+										<Link
+											to={`/movie/${result.id}`}
+											className="block hover:bg-gray-700 px-3 py-3 flex item-center transition ease-in-out duration-150"
+										>
+											{result["poster_path"] ? (
+												<img
+													src={TMDB_IMGURL + "w92" + result.poster_path}
+													alt={result["title"]}
+													className="w-8"
+												></img>
+											) : (
+												<img
+													src="https://via.placeholder.com/50x75"
+													alt=""
+												></img>
+											)}
+											<span class="ml-4">{result["title"]}</span>
+										</Link>
+									</li>
+								);
+							})}
+						</ul>
+					) : (
+						<div className="px-3 py-3">No results for "{search}"</div>
+					)}
+				</div>
+			);
+		}
+	};
+
+	var gotoSearch = (event) => {
+		setSearch(event.target.value);
+	};
+
+	document.addEventListener("keydown", (event) => {
+		if (event.isComposing || event.keyCode === 191) {
+			event.preventDefault();
+			textRef.current.focus();
+		}
+		if (event.isComposing || event.keyCode === 27) {
+			event.preventDefault();
+			setSearchOpen(null);
+			setSearchResult(null);
+		}
+	});
+
 	return (
 		<nav className="border-b border-gray-850">
 			<div className="container px-4 py-6 mx-auto flex flex-col md:flex-row items-center justify-between">
@@ -35,7 +148,35 @@ export default function Navbar() {
 				</ul>
 
 				<div className="flex flex-col md:flex-row items-center">
-					{/* @livewire('search-dropdown') */}
+					<div className="relative mt-3 md:mt-0">
+						<input
+							className="bg-gray-800 text-sm rounded-full w-64 px-4 pl-8 py-1 focus:outline-none focus:shadow-outline"
+							placeholder="Search (Press '/' to focus)"
+							value={search}
+							onChange={gotoSearch}
+							ref={textRef}
+						/>
+						<div className="absolute top-0">
+							<svg
+								className="fill-current w-4 text-gray-500 mt-2 ml-2"
+								viewBox="0 0 24 24"
+							>
+								<path
+									className="heroicon-ui"
+									d="M16.32 14.9l5.39 5.4a1 1 0 01-1.42 1.4l-5.38-5.38a8 8 0 111.41-1.41zM10 16a6 6 0 100-12 6 6 0 000 12z"
+								/>
+							</svg>
+						</div>
+
+						{isLoading ? (
+							<div className="absolute bottom-0 right-0 mr-0 mt-3">
+								<img src={eater} alt=""></img>
+							</div>
+						) : null}
+
+						{searchOpen ? displayResult() : null}
+					</div>
+
 					<div className="md:ml-4 mt-3 md:mt-0">
 						<a href="/">
 							<img

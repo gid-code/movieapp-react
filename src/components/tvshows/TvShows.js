@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { TMDB_BASEURL, TMDB_TOKEN } from "../../config/apiConfig";
 import MoviesList from "../movies/MoviesList";
+import eaterbig from "../eaterbig.svg";
 
 export default class TvShows extends Component {
 	state = {
@@ -50,7 +51,13 @@ export default class TvShows extends Component {
 	render() {
 		const { ptv, trs, gnr } = this.state;
 		if (ptv === null || gnr === null) {
-			return <div>Loading...</div>;
+			return (
+				<div className="container mx-auto">
+					<div className="mx-auto p-20 m-20">
+						<img alt="" src={eaterbig} className="mx-auto"></img>
+					</div>
+				</div>
+			);
 		} else {
 			return (
 				<div className="container mx-auto px-4 pt-16">

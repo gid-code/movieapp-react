@@ -17,7 +17,7 @@ export default class ImageList extends Component {
 			}
 			return element.map((img) => {
 				return (
-					<div className="mt-8">
+					<div className="mt-8" key={img}>
 						<a
 							onClick={() => {
 								this.props.openImgModal(img["file_path"]);
@@ -27,7 +27,7 @@ export default class ImageList extends Component {
 							<img
 								src={TMDB_IMGURL + "w500" + img["file_path"]}
 								alt="parasite"
-								class="hover:opacity-75 transition ease-in-out duration-150"
+								className="hover:opacity-75 transition ease-in-out duration-150"
 							></img>
 						</a>
 					</div>
