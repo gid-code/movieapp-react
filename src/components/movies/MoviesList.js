@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import MovieItem from "./MovieItem";
+import eaterbig from "../eaterbig.svg";
 
 export default class MoviesList extends Component {
 	constructor(props) {
@@ -42,7 +43,13 @@ export default class MoviesList extends Component {
 				</div>
 			);
 		} else {
-			return <div>Loading...</div>;
+			return (
+				<div className="container mx-auto">
+					<div className="mx-auto p-20 m-20">
+						<img alt="" src={eaterbig} className="mx-auto"></img>
+					</div>
+				</div>
+			);
 		}
 	}
 }

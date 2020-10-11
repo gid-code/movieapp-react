@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { TMDB_IMGURL, TMDB_BASEURL, TMDB_TOKEN } from "../../config/apiConfig";
 import Axios from "axios";
 import CrewList from "./CrewList";
