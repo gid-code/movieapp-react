@@ -21,13 +21,17 @@ export default class MovieItem extends Component {
 				return grs
 					.map((el) => {
 						var gnr = genres.genres.filter((gn) => gn["id"] === el);
-						return gnr[0]["name"];
+						if (gnr.length > 0) {
+							return gnr[0]["name"];
+						} else {
+							return "";
+						}
 					})
 					.join(", ");
 			};
 
 			return (
-				<div class="mt-8">
+				<div className="mt-8">
 					<Link to={`/${type}/${id}`}>
 						<img
 							src={TMDB_IMGURL + "w500" + poster_path}
