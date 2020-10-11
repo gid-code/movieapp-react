@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 
-/src/config
+/src/config/apiConfig_dev.js
 
 # testing
 /coverage

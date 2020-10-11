@@ -17,7 +17,23 @@ export default function Navbar() {
 		}
 
 		const timeout = setTimeout(() => {
-			result();
+			// result();
+			if (search.length > 1) {
+				setIsLoading(true);
+				axios
+					.get(TMDB_BASEURL + "/search/movie?query=" + search, {
+						headers: {
+							"Content-Type": "application/json;charset=utf-8",
+							Authorization: `Bearer ${TMDB_TOKEN}`,
+						},
+					})
+					.then((res) => {
+						setSearchResult(res.data["results"]);
+						setIsLoading(false);
+					})
+					.then(setSearchOpen(true))
+					.catch((err) => console.log(err));
+			}
 		}, 2000);
 
 		return () => clearTimeout(timeout);
